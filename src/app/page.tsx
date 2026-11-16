@@ -1,7 +1,6 @@
 import { ShieldCheck, Workflow } from "lucide-react";
 
 import { AgentLedger } from "@/components/agent-ledger";
-import { HashFormula } from "@/components/hash-formula";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const PILLARS = [
@@ -38,8 +37,6 @@ export default function Home() {
           takes is appended to a hash chain — so after the fact, anyone can prove
           whether the record is the real one.
         </p>
-
-        <HashFormula />
       </header>
 
       <div className="mt-12">
@@ -64,10 +61,6 @@ export default function Home() {
         <p>
           Any OpenRouter model (swap it with one env var) · Tavily web search
           · Vercel AI SDK ToolLoopAgent · Next.js App Router
-        </p>
-        <p className="mt-1.5">
-          This proves the record wasn&apos;t altered after the fact — not what
-          hardware it ran on. For that, anchor these hashes externally.
         </p>
       </footer>
     </main>

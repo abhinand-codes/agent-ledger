@@ -235,10 +235,11 @@ export function AgentLedger() {
           value={task}
           onChange={(event) => setTask(event.target.value)}
           onKeyDown={(event) => {
-            if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
-              event.preventDefault();
-              void runAgent(task);
-            }
+            // Enter sends, like every chat input people already know.
+            // Shift+Enter still breaks the line for a multi-part task.
+            if (event.key !== "Enter" || event.shiftKey) return;
+            event.preventDefault();
+            void runAgent(task);
           }}
           placeholder="What should the agent look into?"
           rows={3}
@@ -249,7 +250,7 @@ export function AgentLedger() {
 
         <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
           <span className="font-mono text-[11px] text-muted-foreground">
-            ⌘↵ to run
+            ↵ to send · ⇧↵ new line
           </span>
           <div className="ml-auto flex gap-2">
             {running && (
