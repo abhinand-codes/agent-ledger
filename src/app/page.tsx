@@ -29,8 +29,8 @@ export default function Home() {
           tamper-evident agent runs
         </span>
 
-        <h1 className="mt-5 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-          Agent Ledger
+        <h1 className="mt-5 text-5xl font-semibold tracking-tighter text-balance sm:text-7xl">
+          Agent<span className="text-chain">.</span>Ledger
         </h1>
 
         <p className="mt-4 max-w-2xl text-lg text-pretty text-muted-foreground">
@@ -49,15 +49,14 @@ export default function Home() {
         <AgentLedger />
       </div>
 
-      <section className="mt-20 grid gap-5 sm:grid-cols-3">
+      <section className="mt-16 flex flex-col divide-y divide-border/60 overflow-hidden rounded-xl border border-border/60 bg-card/20 sm:flex-row sm:divide-x sm:divide-y-0">
         {PILLARS.map(({ icon: Icon, title, body }) => (
-          <div
-            key={title}
-            className="rounded-xl border border-border/70 bg-card/40 p-4 backdrop-blur-sm"
-          >
-            <Icon className="size-4 text-chain" />
-            <h3 className="mt-3 text-sm font-semibold">{title}</h3>
-            <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
+          <div key={title} className="flex-1 p-4">
+            <div className="flex items-center gap-2">
+              <Icon className="size-3.5 shrink-0 text-chain" />
+              <h3 className="text-[13px] font-semibold">{title}</h3>
+            </div>
+            <p className="mt-1 text-[12px] leading-relaxed text-muted-foreground">
               {body}
             </p>
           </div>

@@ -135,8 +135,8 @@ export function StepCard({
         <span
           aria-hidden
           className={cn(
-            "chain-rail absolute top-9 bottom-0 left-[15.5px] w-px sm:left-[19.5px]",
-            isBroken && "opacity-30",
+            "absolute top-9 bottom-0 left-[15.5px] w-px sm:left-[19.5px]",
+            isBroken ? "chain-rail-broken" : "chain-rail",
           )}
         />
       )}
@@ -156,7 +156,7 @@ export function StepCard({
         className={cn(
           "group rounded-xl border bg-card/70 backdrop-blur-sm transition-colors",
           isBroken
-            ? "border-tampered/55 bg-tampered/[0.06]"
+            ? "link-snap border-tampered/55 bg-tampered/[0.06] shadow-[0_0_0_1px_color-mix(in_oklch,var(--tampered)_30%,transparent)]"
             : "border-border/80 hover:border-border",
           isDownstream && !isBroken && "opacity-60",
         )}

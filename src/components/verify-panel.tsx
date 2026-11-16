@@ -113,12 +113,14 @@ export function VerifyPanel({
               "mt-5 rounded-xl border p-4",
               verification.valid
                 ? "border-verified/40 bg-verified/[0.08]"
-                : "border-tampered/45 bg-tampered/[0.08]",
+                : "link-snap border-tampered/45 bg-tampered/[0.08]",
             )}
           >
             <div className="flex items-center gap-2.5">
               {verification.valid ? (
-                <ShieldCheck className="size-5 shrink-0 text-verified" />
+                <span className="seal-stamp inline-flex shrink-0 rounded-full bg-verified/15 p-1 shadow-[0_0_0_1px_color-mix(in_oklch,var(--verified)_35%,transparent),0_0_18px_-2px_color-mix(in_oklch,var(--verified)_55%,transparent)]">
+                  <ShieldCheck className="size-5 text-verified" />
+                </span>
               ) : (
                 <ShieldX className="size-5 shrink-0 text-tampered" />
               )}
