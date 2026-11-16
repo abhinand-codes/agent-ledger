@@ -13,6 +13,7 @@ import {
   type LedgerAction,
 } from "@/lib/ledger";
 import type { RunEvent } from "@/lib/protocol";
+import { checkRateLimit, clientIp } from "@/lib/rate-limit";
 import { getRun, saveRun } from "@/lib/store";
 
 export const runtime = "nodejs";
@@ -52,6 +53,24 @@ export async function GET(request: Request): Promise<Response> {
 }
 
 export async function POST(request: Request): Promise<Response> {
+  const limit = checkRateLimit(clientIp(request));
+  if (!limit.allowed) {
+    const error =
+      limit.reason === "ip"
+        ? `You've run the agent a few times in the last few minutes — wait about ${limit.retryAfterSeconds}s and try again. This keeps the shared search quota available for everyone trying the demo.`
+        : "This demo runs on a shared free search quota, and today's limit is already used up. Please check back tomorrow.";
+    return Response.json(
+      { error },
+      {
+        status: 429,
+        headers:
+          limit.reason === "ip"
+            ? { "Retry-After": String(limit.retryAfterSeconds) }
+            : undefined,
+      },
+    );
+  }
+
   let task: string;
   try {
     const body = (await request.json()) as { task?: unknown };

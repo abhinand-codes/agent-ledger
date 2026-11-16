@@ -83,7 +83,18 @@ export function AgentLedger() {
         });
 
         if (!response.ok || !response.body) {
-          const detail = await response.text();
+          // The API always replies with { error: "a full sentence" } — read
+          // that instead of showing the raw JSON body as if it were prose.
+          const raw = await response.text();
+          let detail = raw;
+          try {
+            const parsed = JSON.parse(raw) as { error?: unknown };
+            if (typeof parsed.error === "string" && parsed.error) {
+              detail = parsed.error;
+            }
+          } catch {
+            // Not JSON — fall back to the raw text below.
+          }
           throw new Error(
             detail.slice(0, 300) || `Request failed (${response.status})`,
           );
