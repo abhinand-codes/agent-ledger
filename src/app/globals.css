@@ -124,6 +124,62 @@
       44px 44px,
       44px 44px;
     background-attachment: fixed;
+    position: relative;
+  }
+
+  /*
+   * A fine photographic grain, the kind instrument displays and premium
+   * dark UIs use to keep a large flat dark area from looking like a flat
+   * color fill. Pure CSS (fractal-noise SVG as a data URI) — no image
+   * request, no JS, practically free to render.
+   */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /*
+   * A slow verification sweep — a thin band of the chain color drifting
+   * down the page, loosely reading as "something is continuously being
+   * checked here" without calling attention to itself.
+   */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: -20% 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      color-mix(in oklch, var(--chain) 5%, transparent) 49%,
+      color-mix(in oklch, var(--chain) 9%, transparent) 50%,
+      color-mix(in oklch, var(--chain) 5%, transparent) 51%,
+      transparent 100%
+    );
+    animation: verify-sweep 9s ease-in-out infinite;
+  }
+
+  /* Keep real content above the grain/sweep layers, which are purely decorative. */
+  body > main {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+@keyframes verify-sweep {
+  0%,
+  100% {
+    transform: translateY(-15%);
+  }
+  50% {
+    transform: translateY(15%);
   }
 }
 
@@ -274,5 +330,27 @@
   }
   &:disabled {
     background-position: 0 0;
+  }
+}
+
+/*
+ * One rule to stop every decorative animation in this file at once. Several
+ * of them (the chain rail, the verification sweep, the run-button sheen)
+ * are purely ambient — they carry no information a static state doesn't
+ * already convey — so a person who has asked their OS for reduced motion
+ * gets the same product with none of the movement, not a degraded one.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  body::after {
+    display: none;
   }
 }

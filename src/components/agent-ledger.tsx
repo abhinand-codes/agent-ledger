@@ -2,9 +2,10 @@
 
 import { useCallback, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUp, Loader2, Square } from "lucide-react";
+import { ArrowUp, Square } from "lucide-react";
 import { toast } from "sonner";
 
+import { HashScramble } from "@/components/hash-scramble";
 import { LedgerJson } from "@/components/ledger-json";
 import { StepCard } from "@/components/step-card";
 import { VerifyPanel } from "@/components/verify-panel";
@@ -262,11 +263,7 @@ export function AgentLedger() {
               disabled={running || !task.trim()}
               className="run-button"
             >
-              {running ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                <ArrowUp className="size-4" />
-              )}
+              {running ? <HashScramble /> : <ArrowUp className="size-4" />}
               {running ? "Running" : "Run agent"}
             </Button>
           </div>
