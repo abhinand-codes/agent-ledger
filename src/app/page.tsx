@@ -65,8 +65,8 @@ export default function Home() {
 
       <footer className="mt-16 border-t border-border/60 pt-6 text-[12px] text-muted-foreground">
         <p>
-          Kimi K2 via OpenRouter · Tavily web search · Vercel AI SDK
-          ToolLoopAgent · Next.js App Router
+          Any OpenRouter model (swap it with one env var) · Tavily web search
+          · Vercel AI SDK ToolLoopAgent · Next.js App Router
         </p>
         <p className="mt-1.5">
           The ledger proves the record of a run was not altered after the fact.
