@@ -98,12 +98,35 @@
 
   html {
     @apply font-sans;
+    color-scheme: light;
+  }
+
+  html.dark {
     color-scheme: dark;
   }
 
   body {
     @apply bg-background text-foreground antialiased;
-    /* A faint grid, to read as instrument panel rather than marketing page. */
+    /* Light mode: a quiet paper grid — reads as a clean report, not a toy. */
+    background-image:
+      linear-gradient(
+        color-mix(in oklch, var(--foreground) 4%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        color-mix(in oklch, var(--foreground) 4%, transparent) 1px,
+        transparent 1px
+      );
+    background-size:
+      44px 44px,
+      44px 44px;
+    background-attachment: fixed;
+    position: relative;
+  }
+
+  /* Dark mode gets the fuller instrument-panel treatment. */
+  .dark body {
     background-image:
       radial-gradient(
         ellipse 80% 55% at 50% -10%,
@@ -123,17 +146,16 @@
       100% 100%,
       44px 44px,
       44px 44px;
-    background-attachment: fixed;
-    position: relative;
   }
 
   /*
    * A fine photographic grain, the kind instrument displays and premium
    * dark UIs use to keep a large flat dark area from looking like a flat
    * color fill. Pure CSS (fractal-noise SVG as a data URI) — no image
-   * request, no JS, practically free to render.
+   * request, no JS, practically free to render. Dark mode only: on a light
+   * page this reads as dirt, not texture.
    */
-  body::before {
+  .dark body::before {
     content: "";
     position: fixed;
     inset: 0;
@@ -147,9 +169,9 @@
   /*
    * A slow verification sweep — a thin band of the chain color drifting
    * down the page, loosely reading as "something is continuously being
-   * checked here" without calling attention to itself.
+   * checked here" without calling attention to itself. Dark mode only.
    */
-  body::after {
+  .dark body::after {
     content: "";
     position: fixed;
     inset: -20% 0;
@@ -317,7 +339,10 @@
     0 1px 0 0 color-mix(in oklch, white 18%, transparent) inset,
     0 0 0 1px color-mix(in oklch, var(--chain) 45%, transparent),
     0 6px 20px -6px color-mix(in oklch, var(--chain) 70%, transparent);
-  transition: box-shadow 0.2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.15s ease-out,
+    background-position 0.2s ease;
 
   &:not(:disabled) {
     animation: run-sheen 2.6s linear infinite;
@@ -350,7 +375,7 @@
     scroll-behavior: auto !important;
   }
 
-  body::after {
+  .dark body::after {
     display: none;
   }
 }

@@ -1,17 +1,14 @@
-import { Link2, ShieldCheck, Workflow } from "lucide-react";
+import { ShieldCheck, Workflow } from "lucide-react";
 
 import { AgentLedger } from "@/components/agent-ledger";
+import { HashFormula } from "@/components/hash-formula";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const PILLARS = [
   {
     icon: Workflow,
     title: "Every step recorded",
     body: "Plan, reasoning, tool call, tool result, final answer — each one becomes a ledger entry the moment the agent commits it.",
-  },
-  {
-    icon: Link2,
-    title: "Chained with SHA-256",
-    body: "Each entry's hash commits to its own contents and to the hash before it, back to GENESIS. Edit one byte and the link snaps.",
   },
   {
     icon: ShieldCheck,
@@ -24,10 +21,13 @@ export default function Home() {
   return (
     <main className="mx-auto w-full max-w-3xl px-5 py-14 sm:px-6 sm:py-20">
       <header>
-        <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/60 px-3 py-1 font-mono text-[11px] text-muted-foreground backdrop-blur-sm">
-          <span className="size-1.5 rounded-full bg-chain" />
-          tamper-evident agent runs
-        </span>
+        <div className="flex items-center justify-between gap-3">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/60 px-3 py-1 font-mono text-[11px] text-muted-foreground backdrop-blur-sm">
+            <span className="size-1.5 rounded-full bg-chain" />
+            tamper-evident agent runs
+          </span>
+          <ThemeToggle />
+        </div>
 
         <h1 className="mt-5 text-5xl font-semibold tracking-tighter text-balance sm:text-7xl">
           Agent<span className="text-chain">.</span>Ledger
@@ -39,10 +39,7 @@ export default function Home() {
           whether the record is the real one.
         </p>
 
-        <code className="mt-6 block overflow-x-auto rounded-xl border border-border/70 bg-card/50 px-4 py-3 font-mono text-[12px] leading-relaxed text-muted-foreground backdrop-blur-sm">
-          hash = sha256(prevHash + JSON.stringify({"{"} stepId, timestamp, agent,
-          action, input, output {"}"}))
-        </code>
+        <HashFormula />
       </header>
 
       <div className="mt-12">
@@ -63,15 +60,14 @@ export default function Home() {
         ))}
       </section>
 
-      <footer className="mt-16 border-t border-border/60 pt-6 text-[12px] text-muted-foreground">
+      <footer className="mt-16 border-t border-border/60 pt-6 text-[12px] leading-relaxed text-muted-foreground">
         <p>
           Any OpenRouter model (swap it with one env var) · Tavily web search
           · Vercel AI SDK ToolLoopAgent · Next.js App Router
         </p>
         <p className="mt-1.5">
-          The ledger proves the record of a run was not altered after the fact.
-          It does not attest to the hardware the agent ran on — for that you
-          would anchor these hashes externally.
+          This proves the record wasn&apos;t altered after the fact — not what
+          hardware it ran on. For that, anchor these hashes externally.
         </p>
       </footer>
     </main>

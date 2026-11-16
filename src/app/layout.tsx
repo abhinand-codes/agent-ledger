@@ -1,7 +1,28 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Toaster } from "sonner";
+import Script from "next/script";
 import "./globals.css";
+
+import { ThemedToaster } from "@/components/themed-toaster";
+
+// Runs before React hydrates, so the right theme is on screen for the very
+// first paint — no light-mode flash while the app figures out what you last
+// picked. Falls back to the OS preference the first time anyone visits.
+const THEME_INIT_SCRIPT = `
+(function () {
+  try {
+    var stored = localStorage.getItem("theme");
+    var theme =
+      stored === "light" || stored === "dark"
+        ? stored
+        : window.matchMedia("(prefers-color-scheme: light)").matches
+          ? "light"
+          : "dark";
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.style.colorScheme = theme;
+  } catch (e) {}
+})();
+`;
 
 const geistSans = Geist({
   variable: "--font-sans",
@@ -25,21 +46,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {THEME_INIT_SCRIPT}
+        </Script>
         {children}
-        <Toaster
-          theme="dark"
-          position="bottom-right"
-          toastOptions={{
-            classNames: {
-              toast:
-                "!rounded-xl !border !border-border/80 !bg-card !text-foreground !shadow-lg !font-sans",
-              title: "!text-sm !font-medium",
-              description: "!text-muted-foreground !text-[13px]",
-            },
-          }}
-        />
+        <ThemedToaster />
       </body>
     </html>
   );

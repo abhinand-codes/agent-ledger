@@ -240,7 +240,7 @@ export function AgentLedger() {
               void runAgent(task);
             }
           }}
-          placeholder="Give the agent a task it needs to look up — e.g. “What's the latest version of React, and what changed?”"
+          placeholder="What should the agent look into?"
           rows={3}
           maxLength={500}
           disabled={running}
@@ -279,7 +279,7 @@ export function AgentLedger() {
                   setTask(example);
                   void runAgent(example);
                 }}
-                className="cursor-pointer rounded-full border border-border/70 px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-chain/50 hover:text-foreground"
+                className="cursor-pointer rounded-full border border-border/70 px-3 py-1 text-xs text-muted-foreground transition-[color,border-color,transform] duration-150 hover:border-chain/50 hover:text-foreground active:scale-95"
               >
                 {example}
               </button>
