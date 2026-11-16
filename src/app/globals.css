@@ -234,3 +234,45 @@
 @utility seal-stamp {
   animation: seal-stamp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/*
+ * The one button on the page that gets a signature treatment — everything
+ * else stays plain so this keeps reading as the primary action, not just
+ * "the purple one."
+ */
+@keyframes run-sheen {
+  to {
+    background-position: 220% 0;
+  }
+}
+
+@utility run-button {
+  position: relative;
+  background: linear-gradient(
+    100deg,
+    var(--chain) 0%,
+    color-mix(in oklch, var(--chain) 70%, white 30%) 35%,
+    var(--chain) 50%,
+    var(--chain) 100%
+  );
+  background-size: 220% 100%;
+  color: var(--primary-foreground);
+  box-shadow:
+    0 1px 0 0 color-mix(in oklch, white 18%, transparent) inset,
+    0 0 0 1px color-mix(in oklch, var(--chain) 45%, transparent),
+    0 6px 20px -6px color-mix(in oklch, var(--chain) 70%, transparent);
+  transition: box-shadow 0.2s ease;
+
+  &:not(:disabled) {
+    animation: run-sheen 2.6s linear infinite;
+  }
+  &:not(:disabled):hover {
+    box-shadow:
+      0 1px 0 0 color-mix(in oklch, white 22%, transparent) inset,
+      0 0 0 1px color-mix(in oklch, var(--chain) 60%, transparent),
+      0 8px 26px -4px color-mix(in oklch, var(--chain) 85%, transparent);
+  }
+  &:disabled {
+    background-position: 0 0;
+  }
+}

@@ -32,12 +32,20 @@ function errorMessage(error: unknown): string {
 export async function GET(request: Request): Promise<Response> {
   const runId = new URL(request.url).searchParams.get("runId");
   if (!runId) {
-    return Response.json({ error: "runId is required" }, { status: 400 });
+    return Response.json(
+      { error: "Add ?runId=<id> to look up a stored run." },
+      { status: 400 },
+    );
   }
 
   const ledger = getRun(runId);
   if (!ledger) {
-    return Response.json({ error: "run not found" }, { status: 404 });
+    return Response.json(
+      {
+        error: `No run found for "${runId}". Runs are kept in memory, so they don't survive a server restart or a new deployment.`,
+      },
+      { status: 404 },
+    );
   }
 
   return Response.json(ledger);
@@ -49,15 +57,23 @@ export async function POST(request: Request): Promise<Response> {
     const body = (await request.json()) as { task?: unknown };
     task = typeof body.task === "string" ? body.task.trim() : "";
   } catch {
-    return Response.json({ error: "invalid JSON body" }, { status: 400 });
+    return Response.json(
+      { error: "That request wasn't valid JSON — the body must be { \"task\": string }." },
+      { status: 400 },
+    );
   }
 
   if (!task) {
-    return Response.json({ error: "task is required" }, { status: 400 });
+    return Response.json(
+      { error: "Give the agent something to do first — the task can't be empty." },
+      { status: 400 },
+    );
   }
   if (task.length > MAX_TASK_LENGTH) {
     return Response.json(
-      { error: `task must be ${MAX_TASK_LENGTH} characters or fewer` },
+      {
+        error: `That task is ${task.length} characters — keep it under ${MAX_TASK_LENGTH} so the agent stays focused on one thing.`,
+      },
       { status: 400 },
     );
   }

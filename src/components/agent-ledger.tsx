@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUp, Loader2, Square } from "lucide-react";
+import { toast } from "sonner";
 
 import { LedgerJson } from "@/components/ledger-json";
 import { StepCard } from "@/components/step-card";
@@ -90,6 +91,8 @@ export function AgentLedger() {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = "";
+        let finalCount: number | null = null;
+        let midRunError: string | null = null;
 
         const handle = (line: string) => {
           if (!line.trim()) return;
@@ -102,8 +105,10 @@ export function AgentLedger() {
             setEntries(finalEntries);
             setPristine(finalEntries);
             setMeta(ledgerMeta);
+            finalCount = finalEntries.length;
           } else if (event.type === "error") {
             setError(event.message);
+            midRunError = event.message;
           }
         };
 
@@ -118,13 +123,25 @@ export function AgentLedger() {
         handle(buffer);
 
         setStatus((current) => (current === "running" ? "done" : current));
+
+        if (midRunError) {
+          toast.error("The agent couldn't finish", { description: midRunError });
+        } else if (finalCount) {
+          toast.success("Run complete", {
+            description: `${finalCount} step${finalCount === 1 ? "" : "s"} chained to the ledger.`,
+          });
+        }
       } catch (caught) {
         if (controller.signal.aborted) {
           setStatus("done");
           return;
         }
-        setError(caught instanceof Error ? caught.message : String(caught));
+        const message = caught instanceof Error ? caught.message : String(caught);
+        setError(message);
         setStatus("error");
+        toast.error("The run couldn't reach the server", {
+          description: message,
+        });
       } finally {
         abortRef.current = null;
       }
@@ -158,6 +175,10 @@ export function AgentLedger() {
     } finally {
       setVerifying(false);
     }
+    toast("Tampering simulated", {
+      description: `${result.stepId} was mutated without updating its stored hash.`,
+      icon: "🧪",
+    });
   }, [entries]);
 
   const restore = useCallback(async () => {
@@ -169,6 +190,7 @@ export function AgentLedger() {
     } finally {
       setVerifying(false);
     }
+    toast.success("Original ledger restored");
   }, [pristine]);
 
   const download = useCallback(() => {
@@ -190,6 +212,9 @@ export function AgentLedger() {
     anchor.download = `agent-ledger-${payload.runId}.json`;
     anchor.click();
     URL.revokeObjectURL(url);
+    toast.success("Downloaded", {
+      description: `agent-ledger-${payload.runId}.json · ${payload.entries.length} entries.`,
+    });
   }, [ledger, entries, task]);
 
   return (
@@ -232,7 +257,11 @@ export function AgentLedger() {
                 Stop
               </Button>
             )}
-            <Button type="submit" disabled={running || !task.trim()}>
+            <Button
+              type="submit"
+              disabled={running || !task.trim()}
+              className="run-button"
+            >
               {running ? (
                 <Loader2 className="size-4 animate-spin" />
               ) : (
