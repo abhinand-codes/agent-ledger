@@ -40,33 +40,33 @@
 /*
  * A different brand entirely, not a recolor: a bound ledger book, not a
  * SaaS dashboard. Dark mode is the leather cover — a deep, desaturated
- * bottle green, not neutral black-grey — with brass foil for ink. Light
- * mode is the page inside — warm cream paper, the same brass ink. Verified
- * gets its own cool teal-green so it never blends into the cover color it
- * sits on top of; tampered stays a clean red. Both themes are real, not a
- * light palette kept alive out of obligation.
+ * bottle green — with brass foil for ink. Light mode is the same book
+ * open to a page: white paper with that same green as the shading, not a
+ * separate warm-cream palette. Brass stays the one accent ink in both.
+ * Verified gets its own cool teal-green so it never blends into the green
+ * it sits on; tampered stays a clean red.
  */
 :root {
   --radius: 0.4rem;
-  --background: oklch(0.975 0.012 85);
-  --foreground: oklch(0.24 0.03 70);
-  --card: oklch(0.99 0.006 85);
-  --card-foreground: oklch(0.24 0.03 70);
-  --popover: oklch(0.99 0.006 85);
-  --popover-foreground: oklch(0.24 0.03 70);
+  --background: oklch(0.99 0.006 155);
+  --foreground: oklch(0.22 0.027 155);
+  --card: oklch(0.995 0.004 155);
+  --card-foreground: oklch(0.22 0.027 155);
+  --popover: oklch(0.995 0.004 155);
+  --popover-foreground: oklch(0.22 0.027 155);
   --primary: oklch(0.42 0.1 75);
-  --primary-foreground: oklch(0.99 0.006 85);
-  --secondary: oklch(0.95 0.014 85);
-  --secondary-foreground: oklch(0.3 0.03 75);
-  --muted: oklch(0.95 0.014 85);
-  --muted-foreground: oklch(0.5 0.022 75);
-  --accent: oklch(0.92 0.03 80);
+  --primary-foreground: oklch(0.99 0.004 155);
+  --secondary: oklch(0.955 0.013 155);
+  --secondary-foreground: oklch(0.28 0.025 155);
+  --muted: oklch(0.955 0.013 155);
+  --muted-foreground: oklch(0.48 0.02 150);
+  --accent: oklch(0.93 0.025 80);
   --accent-foreground: oklch(0.32 0.05 75);
   --destructive: oklch(0.56 0.2 24);
-  --border: oklch(0.88 0.02 80);
-  --input: oklch(0.92 0.015 80);
+  --border: oklch(0.885 0.016 155);
+  --input: oklch(0.92 0.013 155);
   --ring: oklch(0.55 0.1 75);
-  --verified: oklch(0.52 0.12 165);
+  --verified: oklch(0.5 0.13 165);
   --tampered: oklch(0.56 0.2 24);
   --chain: oklch(0.5 0.12 75);
   --seal-ring: oklch(0.5 0.1 75 / 55%);
@@ -115,8 +115,23 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    /* Light mode: a quiet paper grid — reads as a clean report, not a toy. */
+    /*
+     * Light mode: white paper, shaded with the same green as the dark
+     * cover — a soft wash top-left, a deeper one low-right for depth —
+     * under a quiet paper grid. Not a flat white, not a separate cream
+     * palette.
+     */
     background-image:
+      radial-gradient(
+        ellipse 75% 50% at 8% -10%,
+        oklch(0.64 0.09 155 / 14%),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 65% 55% at 100% 110%,
+        oklch(0.5 0.1 155 / 16%),
+        transparent 72%
+      ),
       linear-gradient(
         color-mix(in oklch, var(--foreground) 4%, transparent) 1px,
         transparent 1px
@@ -127,6 +142,8 @@
         transparent 1px
       );
     background-size:
+      100% 100%,
+      100% 100%,
       44px 44px,
       44px 44px;
     background-attachment: fixed;
