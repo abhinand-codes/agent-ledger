@@ -199,7 +199,7 @@ export function AgentLedger() {
           event.preventDefault();
           void runAgent(task);
         }}
-        className="rounded-2xl border border-border/80 bg-card/60 p-4 backdrop-blur-sm sm:p-5"
+        className="ledger-surface rounded-2xl border border-border/80 bg-card/60 p-4 backdrop-blur-sm sm:p-5"
       >
         <label htmlFor="task" className="sr-only">
           Task for the agent
@@ -271,7 +271,7 @@ export function AgentLedger() {
       {entries.length > 0 && (
         <section>
           <div className="mb-5 flex items-baseline justify-between gap-4">
-            <h2 className="text-base font-semibold">Audit trail</h2>
+            <h2 className="font-display text-xl font-medium">Audit trail</h2>
             <span className="font-mono text-[11px] text-muted-foreground">
               {running ? "streaming…" : `${entries.length} chained entries`}
             </span>

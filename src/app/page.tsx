@@ -29,8 +29,8 @@ export default function Home() {
           tamper-evident agent runs
         </span>
 
-        <h1 className="mt-5 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-          Agent Ledger
+        <h1 className="mt-5 font-display text-[2.75rem] leading-[1.05] font-medium text-balance sm:text-6xl">
+          Agent <em className="font-normal italic">Ledger</em>
         </h1>
 
         <p className="mt-4 max-w-2xl text-lg text-pretty text-muted-foreground">
@@ -39,7 +39,7 @@ export default function Home() {
           whether the record is the real one.
         </p>
 
-        <code className="mt-6 block overflow-x-auto rounded-xl border border-border/70 bg-card/50 px-4 py-3 font-mono text-[12px] leading-relaxed text-muted-foreground backdrop-blur-sm">
+        <code className="ledger-surface mt-6 block overflow-x-auto rounded-xl border border-border/70 bg-card/50 px-4 py-3 font-mono text-[12px] leading-relaxed text-muted-foreground backdrop-blur-sm">
           hash = sha256(prevHash + JSON.stringify({"{"} stepId, timestamp, agent,
           action, input, output {"}"}))
         </code>
@@ -53,10 +53,10 @@ export default function Home() {
         {PILLARS.map(({ icon: Icon, title, body }) => (
           <div
             key={title}
-            className="rounded-xl border border-border/70 bg-card/40 p-4 backdrop-blur-sm"
+            className="ledger-surface rounded-xl border border-border/70 bg-card/40 p-4 backdrop-blur-sm"
           >
             <Icon className="size-4 text-chain" />
-            <h3 className="mt-3 text-sm font-semibold">{title}</h3>
+            <h3 className="mt-3 font-display text-base font-medium">{title}</h3>
             <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
               {body}
             </p>

@@ -28,7 +28,7 @@ export function LedgerJson({
   };
 
   return (
-    <section className="rounded-2xl border border-border/80 bg-card/60 backdrop-blur-sm">
+    <section className="ledger-surface rounded-2xl border border-border/80 bg-card/60 backdrop-blur-sm">
       <div className="flex items-center gap-2 px-5 py-3.5">
         <button
           type="button"

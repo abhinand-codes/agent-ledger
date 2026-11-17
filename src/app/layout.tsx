@@ -1,15 +1,30 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Hanken_Grotesk, Martian_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-sans",
+// Display: a soft-serif for the ledger's own voice — the one place the app
+// allows itself some editorial character, used sparingly on headings only.
+const fraunces = Fraunces({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: "variable",
+  style: ["normal", "italic"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// Body/UI: a grotesk with more presence than the usual default, carrying
+// every control, label and paragraph.
+const hankenGrotesk = Hanken_Grotesk({
+  variable: "--font-sans",
   subsets: ["latin"],
+  weight: "variable",
+});
+
+// Data: hashes, timestamps and stepIds get a mono face built for reading
+// fixed-width figures, not just code.
+const martianMono = Martian_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: "variable",
 });
 
 export const metadata: Metadata = {
@@ -25,7 +40,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body
+        className={`${fraunces.variable} ${hankenGrotesk.variable} ${martianMono.variable}`}
+      >
         {children}
       </body>
     </html>

@@ -154,7 +154,7 @@ export function StepCard({
 
       <div
         className={cn(
-          "group rounded-xl border bg-card/70 backdrop-blur-sm transition-colors",
+          "ledger-surface group rounded-xl border bg-card/70 backdrop-blur-sm transition-colors",
           isBroken
             ? "border-tampered/55 bg-tampered/[0.06]"
             : "border-border/80 hover:border-border",

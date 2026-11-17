@@ -8,8 +8,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-display: var(--font-display);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -38,57 +38,61 @@
 }
 
 /*
- * Agent Ledger runs dark by default. The light palette exists so the app is
- * not hostile if a browser or OS forces a light rendering, but the product
- * look is the dark one below.
+ * Agent Ledger runs dark by default — this is a deliberate, permanent choice
+ * (see layout.tsx), not a toggle. The palette below reads as a vault ledger,
+ * not a generic AI product: cool ink-black surfaces, a warm brass accent
+ * (think a wax seal or a stamped date, not another blue-violet gradient),
+ * and the verified/tampered states kept visually distinct from that accent
+ * rather than variations on it. The light palette exists only so the app
+ * isn't hostile if dark mode is somehow forced off.
  */
 :root {
-  --radius: 0.75rem;
-  --background: oklch(0.985 0.002 265);
-  --foreground: oklch(0.18 0.01 265);
+  --radius: 0.7rem;
+  --background: oklch(0.985 0.004 85);
+  --foreground: oklch(0.2 0.014 70);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.01 265);
+  --card-foreground: oklch(0.2 0.014 70);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.01 265);
-  --primary: oklch(0.55 0.19 275);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.96 0.004 265);
-  --secondary-foreground: oklch(0.25 0.01 265);
-  --muted: oklch(0.96 0.004 265);
-  --muted-foreground: oklch(0.5 0.012 265);
-  --accent: oklch(0.95 0.012 275);
-  --accent-foreground: oklch(0.3 0.04 275);
-  --destructive: oklch(0.58 0.22 22);
-  --border: oklch(0.9 0.006 265);
-  --input: oklch(0.92 0.006 265);
-  --ring: oklch(0.6 0.16 275);
-  --verified: oklch(0.6 0.15 155);
-  --tampered: oklch(0.62 0.21 20);
-  --chain: oklch(0.65 0.17 275);
+  --popover-foreground: oklch(0.2 0.014 70);
+  --primary: oklch(0.52 0.1 70);
+  --primary-foreground: oklch(0.99 0.004 85);
+  --secondary: oklch(0.96 0.006 85);
+  --secondary-foreground: oklch(0.27 0.014 70);
+  --muted: oklch(0.96 0.006 85);
+  --muted-foreground: oklch(0.52 0.013 75);
+  --accent: oklch(0.94 0.02 75);
+  --accent-foreground: oklch(0.32 0.05 70);
+  --destructive: oklch(0.56 0.2 24);
+  --border: oklch(0.9 0.008 80);
+  --input: oklch(0.92 0.008 80);
+  --ring: oklch(0.6 0.1 72);
+  --verified: oklch(0.58 0.13 152);
+  --tampered: oklch(0.58 0.2 24);
+  --chain: oklch(0.58 0.12 72);
 }
 
 .dark {
-  --background: oklch(0.155 0.014 265);
-  --foreground: oklch(0.96 0.004 265);
-  --card: oklch(0.198 0.016 265);
-  --card-foreground: oklch(0.96 0.004 265);
-  --popover: oklch(0.198 0.016 265);
-  --popover-foreground: oklch(0.96 0.004 265);
-  --primary: oklch(0.72 0.16 278);
-  --primary-foreground: oklch(0.16 0.02 278);
-  --secondary: oklch(0.26 0.018 265);
-  --secondary-foreground: oklch(0.95 0.004 265);
-  --muted: oklch(0.25 0.016 265);
-  --muted-foreground: oklch(0.68 0.015 265);
-  --accent: oklch(0.3 0.04 278);
-  --accent-foreground: oklch(0.93 0.02 278);
-  --destructive: oklch(0.68 0.19 22);
-  --border: oklch(0.99 0.01 265 / 11%);
-  --input: oklch(0.99 0.01 265 / 14%);
-  --ring: oklch(0.65 0.16 278);
-  --verified: oklch(0.76 0.17 158);
-  --tampered: oklch(0.7 0.2 20);
-  --chain: oklch(0.72 0.16 278);
+  --background: oklch(0.14 0.016 264);
+  --foreground: oklch(0.965 0.008 85);
+  --card: oklch(0.187 0.02 264);
+  --card-foreground: oklch(0.965 0.008 85);
+  --popover: oklch(0.21 0.022 264);
+  --popover-foreground: oklch(0.965 0.008 85);
+  --primary: oklch(0.78 0.11 78);
+  --primary-foreground: oklch(0.17 0.025 68);
+  --secondary: oklch(0.25 0.02 264);
+  --secondary-foreground: oklch(0.95 0.008 85);
+  --muted: oklch(0.225 0.018 264);
+  --muted-foreground: oklch(0.675 0.014 78);
+  --accent: oklch(0.27 0.038 75);
+  --accent-foreground: oklch(0.9 0.05 78);
+  --destructive: oklch(0.685 0.19 24);
+  --border: oklch(0.99 0.012 85 / 10%);
+  --input: oklch(0.99 0.012 85 / 13%);
+  --ring: oklch(0.72 0.1 78);
+  --verified: oklch(0.745 0.135 152);
+  --tampered: oklch(0.685 0.19 24);
+  --chain: oklch(0.78 0.11 78);
 }
 
 @layer base {
@@ -103,32 +107,52 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    /* A faint grid, to read as instrument panel rather than marketing page. */
+    /*
+     * Not another blue-violet SaaS gradient: a warm brass glow where a
+     * reading lamp would sit, a cooler slate glow low in the opposite
+     * corner for depth, and a fine dot grid underneath — ledger paper, not
+     * a dashboard grid.
+     */
     background-image:
       radial-gradient(
-        ellipse 80% 55% at 50% -10%,
-        color-mix(in oklch, var(--chain) 16%, transparent),
+        ellipse 70% 45% at 50% -8%,
+        color-mix(in oklch, var(--chain) 14%, transparent),
+        transparent 68%
+      ),
+      radial-gradient(
+        ellipse 60% 50% at 100% 115%,
+        oklch(0.3 0.05 255 / 20%),
         transparent 70%
       ),
-      linear-gradient(
-        color-mix(in oklch, var(--foreground) 3.5%, transparent) 1px,
-        transparent 1px
-      ),
-      linear-gradient(
-        90deg,
-        color-mix(in oklch, var(--foreground) 3.5%, transparent) 1px,
+      radial-gradient(
+        color-mix(in oklch, var(--foreground) 14%, transparent) 1px,
         transparent 1px
       );
     background-size:
       100% 100%,
-      44px 44px,
-      44px 44px;
+      100% 100%,
+      26px 26px;
+    background-position:
+      center,
+      center,
+      0 0;
     background-attachment: fixed;
   }
 }
 
 @utility hash-chip {
   @apply inline-flex items-center rounded-md border border-border/70 bg-background/60 px-1.5 py-0.5 font-mono text-[11px] leading-none tracking-tight;
+}
+
+/*
+ * The inset top edge is the one signature every raised surface in the app
+ * shares — a thin line of light, like metal catching a lamp from above.
+ * Spent on panels and cards only, never on inline chips or pills.
+ */
+@utility ledger-surface {
+  box-shadow:
+    inset 0 1px 0 0 color-mix(in oklch, var(--foreground) 7%, transparent),
+    0 1px 2px color-mix(in oklch, black 20%, transparent);
 }
 
 /* The vertical rail that visually "is" the chain. */

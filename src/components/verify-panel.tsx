@@ -38,10 +38,10 @@ export function VerifyPanel({
   onDownload,
 }: VerifyPanelProps) {
   return (
-    <section className="rounded-2xl border border-border/80 bg-card/60 p-5 backdrop-blur-sm sm:p-6">
+    <section className="ledger-surface rounded-2xl border border-border/80 bg-card/60 p-5 backdrop-blur-sm sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h2 className="text-base font-semibold">Verify the chain</h2>
+          <h2 className="font-display text-xl font-medium">Verify the chain</h2>
           <p className="mt-1 max-w-prose text-sm text-muted-foreground">
             Verification runs entirely in your browser: it recomputes every
             SHA-256 link from the ledger you were handed and compares the result
