@@ -1,16 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  Download,
-  FlaskConical,
-  Loader2,
-  RotateCcw,
-  ShieldCheck,
-  ShieldX,
-} from "lucide-react";
+import { Download, FlaskConical, Loader2, RotateCcw, ShieldX } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { SealMark } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { shortHash, type VerificationResult } from "@/lib/ledger";
 
@@ -58,7 +52,7 @@ export function VerifyPanel({
           {verifying ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (
-            <ShieldCheck className="size-4" />
+            <SealMark className="size-4" />
           )}
           Verify integrity
         </Button>
@@ -118,8 +112,8 @@ export function VerifyPanel({
           >
             <div className="flex items-center gap-2.5">
               {verification.valid ? (
-                <span className="seal-stamp inline-flex shrink-0 rounded-full bg-verified/15 p-1 shadow-[0_0_0_1px_color-mix(in_oklch,var(--verified)_35%,transparent),0_0_18px_-2px_color-mix(in_oklch,var(--verified)_55%,transparent)]">
-                  <ShieldCheck className="size-5 text-verified" />
+                <span className="seal-stamp inline-flex shrink-0 rounded-full bg-verified/15 p-1 text-verified shadow-[0_0_0_1px_color-mix(in_oklch,var(--verified)_35%,transparent),0_0_18px_-2px_color-mix(in_oklch,var(--verified)_55%,transparent)]">
+                  <SealMark className="size-5" />
                 </span>
               ) : (
                 <ShieldX className="size-5 shrink-0 text-tampered" />

@@ -355,7 +355,7 @@ export function AgentLedger() {
             </span>
           </div>
 
-          <ul className="relative">
+          <ul className="ledger-surface rounded-md border border-border/70 bg-card/40 px-4 sm:px-5">
             <AnimatePresence initial={false}>
               {entries.map((entry, index) => (
                 <StepCard
@@ -376,7 +376,7 @@ export function AgentLedger() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex items-center gap-2.5 pl-12 text-sm text-muted-foreground sm:pl-14"
+              className="mt-3 flex items-center gap-2.5 pl-1 text-sm text-muted-foreground"
             >
               <span className="live-dot size-2 rounded-full bg-chain" />
               agent is working…

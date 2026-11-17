@@ -1,6 +1,7 @@
 import { ShieldCheck, Workflow } from "lucide-react";
 
 import { AgentLedger } from "@/components/agent-ledger";
+import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const PILLARS = [
@@ -18,46 +19,59 @@ const PILLARS = [
 
 export default function Home() {
   return (
-    <main className="mx-auto w-full max-w-3xl px-5 py-14 sm:px-6 sm:py-20">
+    <main className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-6 sm:py-16">
       <header>
         <div className="flex items-center justify-between gap-3">
-          <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/60 px-3 py-1 font-mono text-[11px] text-muted-foreground backdrop-blur-sm">
-            <span className="size-1.5 rounded-full bg-chain" />
-            tamper-evident agent runs
-          </span>
+          <Logo />
           <ThemeToggle />
         </div>
 
-        <h1 className="mt-5 font-display text-[2.75rem] leading-[1.05] font-medium text-balance sm:text-6xl">
-          Agent <em className="font-normal italic">Ledger</em>
+        {/* A letterhead rule, not a floating pill badge. */}
+        <div className="mt-6 flex items-center gap-3 text-[11px] text-muted-foreground">
+          <span className="h-px flex-1 bg-border" />
+          <span className="font-mono tracking-[0.14em] uppercase">
+            Tamper-evident agent runs
+          </span>
+          <span className="h-px flex-1 bg-border" />
+        </div>
+
+        <h1 className="mt-7 text-center font-display text-[2.5rem] leading-[1.08] font-medium text-balance sm:text-[3.25rem]">
+          An AI agent that cannot <em className="italic">quietly</em> rewrite
+          its own history.
         </h1>
 
-        <p className="mt-4 max-w-2xl text-lg text-pretty text-muted-foreground">
-          An AI agent that cannot quietly rewrite its own history. Every step it
-          takes is appended to a hash chain — so after the fact, anyone can prove
-          whether the record is the real one.
+        <p className="mx-auto mt-4 max-w-xl text-center text-base text-pretty text-muted-foreground">
+          Every step it takes is appended to a hash chain — so after the
+          fact, anyone can prove whether the record is the real one.
         </p>
       </header>
 
-      <div className="mt-12">
+      <div className="mt-10">
         <AgentLedger />
       </div>
 
-      <section className="mt-16 flex flex-col divide-y divide-border/60 overflow-hidden rounded-xl border border-border/60 bg-card/20 sm:flex-row sm:divide-x sm:divide-y-0">
-        {PILLARS.map(({ icon: Icon, title, body }) => (
-          <div key={title} className="flex-1 p-4">
-            <div className="flex items-center gap-2">
-              <Icon className="size-3.5 shrink-0 text-chain" />
+      <section className="mt-14 border-t border-b border-border/70">
+        {PILLARS.map(({ icon: Icon, title, body }, index) => (
+          <div
+            key={title}
+            className={
+              index > 0
+                ? "flex gap-3 border-t border-border/70 py-4"
+                : "flex gap-3 py-4"
+            }
+          >
+            <Icon className="mt-0.5 size-4 shrink-0 text-chain" />
+            <div>
               <h3 className="font-display text-sm font-medium">{title}</h3>
+              <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
+                {body}
+              </p>
             </div>
-            <p className="mt-1 text-[12px] leading-relaxed text-muted-foreground">
-              {body}
-            </p>
           </div>
         ))}
       </section>
 
-      <footer className="mt-16 border-t border-border/60 pt-6 text-[12px] leading-relaxed text-muted-foreground">
+      <footer className="mt-10 text-center text-[11px] leading-relaxed text-muted-foreground">
         <p>
           Any OpenRouter model (swap it with one env var) · Tavily web search
           · Vercel AI SDK ToolLoopAgent · Next.js App Router
