@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Fraunces, Hanken_Grotesk, Martian_Mono } from "next/font/google";
+import { Martian_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
 
@@ -24,21 +25,31 @@ const THEME_INIT_SCRIPT = `
 })();
 `;
 
-// Display: a soft-serif for the ledger's own voice — the one place the app
-// allows itself some editorial character, used sparingly on headings only.
-const fraunces = Fraunces({
+// Display: Gambetta — a sharp, high-contrast serif with the gravitas of an
+// old stock certificate or legal instrument, not another soft editorial
+// serif. Self-hosted from Fontshare (not Google Fonts, deliberately — this
+// app isn't an Artifact and carries no CDN allowlist, so the typeface
+// doesn't have to be one everyone else's AI-generated page also reaches for).
+const gambetta = localFont({
+  src: [
+    { path: "./fonts/gambetta-variable.woff2", weight: "300 700", style: "normal" },
+    { path: "./fonts/gambetta-variable-italic.woff2", weight: "300 700", style: "italic" },
+  ],
   variable: "--font-display",
-  subsets: ["latin"],
-  weight: "variable",
-  style: ["normal", "italic"],
+  display: "swap",
 });
 
-// Body/UI: a grotesk with more presence than the usual default, carrying
-// every control, label and paragraph.
-const hankenGrotesk = Hanken_Grotesk({
+// Body/UI: Switzer — a precise Swiss grotesk, the engineering counterweight
+// to Gambetta's document-of-record voice.
+const switzer = localFont({
+  src: [
+    { path: "./fonts/switzer-400.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/switzer-500.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/switzer-600.woff2", weight: "600", style: "normal" },
+    { path: "./fonts/switzer-700.woff2", weight: "700", style: "normal" },
+  ],
   variable: "--font-sans",
-  subsets: ["latin"],
-  weight: "variable",
+  display: "swap",
 });
 
 // Data: hashes, timestamps and stepIds get a mono face built for reading
@@ -63,7 +74,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${fraunces.variable} ${hankenGrotesk.variable} ${martianMono.variable}`}
+        className={`${gambetta.variable} ${switzer.variable} ${martianMono.variable}`}
       >
         <Script id="theme-init" strategy="beforeInteractive">
           {THEME_INIT_SCRIPT}

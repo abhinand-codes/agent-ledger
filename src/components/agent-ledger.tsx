@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUp, Square } from "lucide-react";
 import { toast } from "sonner";
@@ -43,10 +43,22 @@ export function AgentLedger() {
     description: string;
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [ghostIndex, setGhostIndex] = useState(0);
 
   const abortRef = useRef<AbortController | null>(null);
 
   const running = status === "running";
+
+  // The placeholder rotates through real example tasks every few seconds —
+  // not decoration, it doubles as a live menu: Tab accepts whichever one is
+  // showing. Stops the moment there's real text to protect, or a run to watch.
+  useEffect(() => {
+    if (task || running) return;
+    const id = setInterval(() => {
+      setGhostIndex((index) => (index + 1) % EXAMPLE_TASKS.length);
+    }, 3000);
+    return () => clearInterval(id);
+  }, [task, running]);
 
   const ledger: Ledger | null = useMemo(
     () => (meta ? { ...meta, entries } : null),
@@ -241,27 +253,55 @@ export function AgentLedger() {
         <label htmlFor="task" className="sr-only">
           Task for the agent
         </label>
-        <Textarea
-          id="task"
-          value={task}
-          onChange={(event) => setTask(event.target.value)}
-          onKeyDown={(event) => {
-            // Enter sends, like every chat input people already know.
-            // Shift+Enter still breaks the line for a multi-part task.
-            if (event.key !== "Enter" || event.shiftKey) return;
-            event.preventDefault();
-            void runAgent(task);
-          }}
-          placeholder="What should the agent look into?"
-          rows={3}
-          maxLength={500}
-          disabled={running}
-          className="resize-none border-0 bg-transparent px-1 text-base shadow-none focus-visible:ring-0 dark:bg-transparent"
-        />
+        <div className="relative">
+          {!task && !running && (
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 px-1 py-2 text-base"
+            >
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={ghostIndex}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.55 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  className="block text-muted-foreground"
+                >
+                  {EXAMPLE_TASKS[ghostIndex]}
+                </motion.span>
+              </AnimatePresence>
+            </div>
+          )}
+          <Textarea
+            id="task"
+            value={task}
+            onChange={(event) => setTask(event.target.value)}
+            onKeyDown={(event) => {
+              // Tab accepts whatever example is currently showing — the
+              // rotating placeholder is a live suggestion, not just text.
+              if (event.key === "Tab" && !task && !running) {
+                event.preventDefault();
+                setTask(EXAMPLE_TASKS[ghostIndex]);
+                return;
+              }
+              // Enter sends, like every chat input people already know.
+              // Shift+Enter still breaks the line for a multi-part task.
+              if (event.key !== "Enter" || event.shiftKey) return;
+              event.preventDefault();
+              void runAgent(task);
+            }}
+            placeholder=""
+            rows={3}
+            maxLength={500}
+            disabled={running}
+            className="relative resize-none border-0 bg-transparent px-1 text-base shadow-none focus-visible:ring-0 dark:bg-transparent"
+          />
+        </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
           <span className="font-mono text-[11px] text-muted-foreground">
-            ↵ to send · ⇧↵ new line
+            ↵ to send · ⇧↵ new line · ⇥ to use suggestion
           </span>
           <div className="ml-auto flex gap-2">
             {running && (
