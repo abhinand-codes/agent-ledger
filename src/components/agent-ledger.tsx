@@ -2,8 +2,10 @@
 
 import { useCallback, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUp, Loader2, Square } from "lucide-react";
+import { ArrowUp, Square } from "lucide-react";
+import { toast } from "sonner";
 
+import { HashScramble } from "@/components/hash-scramble";
 import { LedgerJson } from "@/components/ledger-json";
 import { StepCard } from "@/components/step-card";
 import { VerifyPanel } from "@/components/verify-panel";
@@ -81,7 +83,18 @@ export function AgentLedger() {
         });
 
         if (!response.ok || !response.body) {
-          const detail = await response.text();
+          // The API always replies with { error: "a full sentence" } — read
+          // that instead of showing the raw JSON body as if it were prose.
+          const raw = await response.text();
+          let detail = raw;
+          try {
+            const parsed = JSON.parse(raw) as { error?: unknown };
+            if (typeof parsed.error === "string" && parsed.error) {
+              detail = parsed.error;
+            }
+          } catch {
+            // Not JSON — fall back to the raw text below.
+          }
           throw new Error(
             detail.slice(0, 300) || `Request failed (${response.status})`,
           );
@@ -90,6 +103,8 @@ export function AgentLedger() {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = "";
+        let finalCount: number | null = null;
+        let midRunError: string | null = null;
 
         const handle = (line: string) => {
           if (!line.trim()) return;
@@ -102,8 +117,10 @@ export function AgentLedger() {
             setEntries(finalEntries);
             setPristine(finalEntries);
             setMeta(ledgerMeta);
+            finalCount = finalEntries.length;
           } else if (event.type === "error") {
             setError(event.message);
+            midRunError = event.message;
           }
         };
 
@@ -118,13 +135,25 @@ export function AgentLedger() {
         handle(buffer);
 
         setStatus((current) => (current === "running" ? "done" : current));
+
+        if (midRunError) {
+          toast.error("The agent couldn't finish", { description: midRunError });
+        } else if (finalCount) {
+          toast.success("Run complete", {
+            description: `${finalCount} step${finalCount === 1 ? "" : "s"} chained to the ledger.`,
+          });
+        }
       } catch (caught) {
         if (controller.signal.aborted) {
           setStatus("done");
           return;
         }
-        setError(caught instanceof Error ? caught.message : String(caught));
+        const message = caught instanceof Error ? caught.message : String(caught);
+        setError(message);
         setStatus("error");
+        toast.error("The run couldn't reach the server", {
+          description: message,
+        });
       } finally {
         abortRef.current = null;
       }
@@ -158,6 +187,10 @@ export function AgentLedger() {
     } finally {
       setVerifying(false);
     }
+    toast("Tampering simulated", {
+      description: `${result.stepId} was mutated without updating its stored hash.`,
+      icon: "🧪",
+    });
   }, [entries]);
 
   const restore = useCallback(async () => {
@@ -169,6 +202,7 @@ export function AgentLedger() {
     } finally {
       setVerifying(false);
     }
+    toast.success("Original ledger restored");
   }, [pristine]);
 
   const download = useCallback(() => {
@@ -190,6 +224,9 @@ export function AgentLedger() {
     anchor.download = `agent-ledger-${payload.runId}.json`;
     anchor.click();
     URL.revokeObjectURL(url);
+    toast.success("Downloaded", {
+      description: `agent-ledger-${payload.runId}.json · ${payload.entries.length} entries.`,
+    });
   }, [ledger, entries, task]);
 
   return (
@@ -209,12 +246,13 @@ export function AgentLedger() {
           value={task}
           onChange={(event) => setTask(event.target.value)}
           onKeyDown={(event) => {
-            if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
-              event.preventDefault();
-              void runAgent(task);
-            }
+            // Enter sends, like every chat input people already know.
+            // Shift+Enter still breaks the line for a multi-part task.
+            if (event.key !== "Enter" || event.shiftKey) return;
+            event.preventDefault();
+            void runAgent(task);
           }}
-          placeholder="Give the agent a task it needs to look up — e.g. “What's the latest version of React, and what changed?”"
+          placeholder="What should the agent look into?"
           rows={3}
           maxLength={500}
           disabled={running}
@@ -223,7 +261,7 @@ export function AgentLedger() {
 
         <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
           <span className="font-mono text-[11px] text-muted-foreground">
-            ⌘↵ to run
+            ↵ to send · ⇧↵ new line
           </span>
           <div className="ml-auto flex gap-2">
             {running && (
@@ -232,12 +270,12 @@ export function AgentLedger() {
                 Stop
               </Button>
             )}
-            <Button type="submit" disabled={running || !task.trim()}>
-              {running ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                <ArrowUp className="size-4" />
-              )}
+            <Button
+              type="submit"
+              disabled={running || !task.trim()}
+              className="run-button"
+            >
+              {running ? <HashScramble /> : <ArrowUp className="size-4" />}
               {running ? "Running" : "Run agent"}
             </Button>
           </div>
@@ -253,7 +291,7 @@ export function AgentLedger() {
                   setTask(example);
                   void runAgent(example);
                 }}
-                className="cursor-pointer rounded-full border border-border/70 px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-chain/50 hover:text-foreground"
+                className="cursor-pointer rounded-full border border-border/70 px-3 py-1 text-xs text-muted-foreground transition-[color,border-color,transform] duration-150 hover:border-chain/50 hover:text-foreground active:scale-95"
               >
                 {example}
               </button>

@@ -53,46 +53,46 @@
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.2 0.014 70);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.014 70);
-  --primary: oklch(0.52 0.1 70);
-  --primary-foreground: oklch(0.99 0.004 85);
-  --secondary: oklch(0.96 0.006 85);
-  --secondary-foreground: oklch(0.27 0.014 70);
-  --muted: oklch(0.96 0.006 85);
-  --muted-foreground: oklch(0.52 0.013 75);
-  --accent: oklch(0.94 0.02 75);
-  --accent-foreground: oklch(0.32 0.05 70);
-  --destructive: oklch(0.56 0.2 24);
-  --border: oklch(0.9 0.008 80);
-  --input: oklch(0.92 0.008 80);
-  --ring: oklch(0.6 0.1 72);
-  --verified: oklch(0.58 0.13 152);
-  --tampered: oklch(0.58 0.2 24);
-  --chain: oklch(0.58 0.12 72);
+  --popover-foreground: oklch(0.18 0.01 265);
+  --primary: oklch(0.55 0.19 68);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.96 0.004 265);
+  --secondary-foreground: oklch(0.25 0.01 265);
+  --muted: oklch(0.96 0.004 265);
+  --muted-foreground: oklch(0.5 0.012 265);
+  --accent: oklch(0.95 0.012 68);
+  --accent-foreground: oklch(0.3 0.04 68);
+  --destructive: oklch(0.58 0.22 22);
+  --border: oklch(0.9 0.006 265);
+  --input: oklch(0.92 0.006 265);
+  --ring: oklch(0.6 0.16 68);
+  --verified: oklch(0.6 0.15 155);
+  --tampered: oklch(0.62 0.21 20);
+  --chain: oklch(0.65 0.17 68);
 }
 
 .dark {
-  --background: oklch(0.14 0.016 264);
-  --foreground: oklch(0.965 0.008 85);
-  --card: oklch(0.187 0.02 264);
-  --card-foreground: oklch(0.965 0.008 85);
-  --popover: oklch(0.21 0.022 264);
-  --popover-foreground: oklch(0.965 0.008 85);
-  --primary: oklch(0.78 0.11 78);
-  --primary-foreground: oklch(0.17 0.025 68);
-  --secondary: oklch(0.25 0.02 264);
-  --secondary-foreground: oklch(0.95 0.008 85);
-  --muted: oklch(0.225 0.018 264);
-  --muted-foreground: oklch(0.675 0.014 78);
-  --accent: oklch(0.27 0.038 75);
-  --accent-foreground: oklch(0.9 0.05 78);
-  --destructive: oklch(0.685 0.19 24);
-  --border: oklch(0.99 0.012 85 / 10%);
-  --input: oklch(0.99 0.012 85 / 13%);
-  --ring: oklch(0.72 0.1 78);
-  --verified: oklch(0.745 0.135 152);
-  --tampered: oklch(0.685 0.19 24);
-  --chain: oklch(0.78 0.11 78);
+  --background: oklch(0.155 0.014 265);
+  --foreground: oklch(0.96 0.004 265);
+  --card: oklch(0.198 0.016 265);
+  --card-foreground: oklch(0.96 0.004 265);
+  --popover: oklch(0.198 0.016 265);
+  --popover-foreground: oklch(0.96 0.004 265);
+  --primary: oklch(0.72 0.16 68);
+  --primary-foreground: oklch(0.16 0.02 68);
+  --secondary: oklch(0.26 0.018 265);
+  --secondary-foreground: oklch(0.95 0.004 265);
+  --muted: oklch(0.25 0.016 265);
+  --muted-foreground: oklch(0.68 0.015 265);
+  --accent: oklch(0.3 0.04 68);
+  --accent-foreground: oklch(0.93 0.02 68);
+  --destructive: oklch(0.68 0.19 22);
+  --border: oklch(0.99 0.01 265 / 11%);
+  --input: oklch(0.99 0.01 265 / 14%);
+  --ring: oklch(0.65 0.16 68);
+  --verified: oklch(0.76 0.17 158);
+  --tampered: oklch(0.7 0.2 20);
+  --chain: oklch(0.72 0.16 68);
 }
 
 @layer base {
@@ -102,17 +102,40 @@
 
   html {
     @apply font-sans;
+    color-scheme: light;
+  }
+
+  html.dark {
     color-scheme: dark;
   }
 
   body {
     @apply bg-background text-foreground antialiased;
-    /*
-     * Not another blue-violet SaaS gradient: a warm brass glow where a
-     * reading lamp would sit, a cooler slate glow low in the opposite
-     * corner for depth, and a fine dot grid underneath — ledger paper, not
-     * a dashboard grid.
-     */
+    /* Light mode: a quiet paper grid — reads as a clean report, not a toy. */
+    background-image:
+      linear-gradient(
+        color-mix(in oklch, var(--foreground) 4%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        color-mix(in oklch, var(--foreground) 4%, transparent) 1px,
+        transparent 1px
+      );
+    background-size:
+      44px 44px,
+      44px 44px;
+    background-attachment: fixed;
+    position: relative;
+  }
+
+  /*
+   * Dark mode gets the fuller treatment: a warm brass glow where a reading
+   * lamp would sit, a cooler slate glow low in the opposite corner for
+   * depth, and a fine dot grid underneath — ledger paper, not a dashboard
+   * grid — plus the grain and verification sweep below.
+   */
+  .dark body {
     background-image:
       radial-gradient(
         ellipse 70% 45% at 50% -8%,
@@ -138,6 +161,62 @@
       0 0;
     background-attachment: fixed;
   }
+
+  /*
+   * A fine photographic grain, the kind instrument displays and premium
+   * dark UIs use to keep a large flat dark area from looking like a flat
+   * color fill. Pure CSS (fractal-noise SVG as a data URI) — no image
+   * request, no JS, practically free to render. Dark mode only: on a light
+   * page this reads as dirt, not texture.
+   */
+  .dark body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /*
+   * A slow verification sweep — a thin band of the chain color drifting
+   * down the page, loosely reading as "something is continuously being
+   * checked here" without calling attention to itself. Dark mode only.
+   */
+  .dark body::after {
+    content: "";
+    position: fixed;
+    inset: -20% 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      color-mix(in oklch, var(--chain) 5%, transparent) 49%,
+      color-mix(in oklch, var(--chain) 9%, transparent) 50%,
+      color-mix(in oklch, var(--chain) 5%, transparent) 51%,
+      transparent 100%
+    );
+    animation: verify-sweep 9s ease-in-out infinite;
+  }
+
+  /* Keep real content above the grain/sweep layers, which are purely decorative. */
+  body > main {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+@keyframes verify-sweep {
+  0%,
+  100% {
+    transform: translateY(-15%);
+  }
+  50% {
+    transform: translateY(15%);
+  }
 }
 
 @utility hash-chip {
@@ -158,12 +237,38 @@
 /* The vertical rail that visually "is" the chain. */
 @utility chain-rail {
   background: linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in oklch, var(--chain) 70%, transparent) 8%,
+      color-mix(in oklch, var(--chain) 70%, transparent) 92%,
+      transparent
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--chain) 95%, transparent) 0 2px,
+      transparent 2px 16px
+    );
+  background-size:
+    100% 100%,
+    100% 32px;
+  animation: chain-flow 1.1s linear infinite;
+}
+
+@utility chain-rail-broken {
+  background: linear-gradient(
     to bottom,
-    transparent,
-    color-mix(in oklch, var(--chain) 55%, transparent) 8%,
-    color-mix(in oklch, var(--chain) 55%, transparent) 92%,
-    transparent
+    color-mix(in oklch, var(--tampered) 75%, transparent),
+    transparent 55%
   );
+  animation: none;
+}
+
+@keyframes chain-flow {
+  to {
+    background-position:
+      0 0,
+      0 32px;
+  }
 }
 
 @keyframes ledger-pulse {
@@ -180,4 +285,122 @@
 
 @utility live-dot {
   animation: ledger-pulse 1.4s ease-in-out infinite;
+}
+
+/* A broken link snapping — used the instant a card flips to "isBroken". */
+@keyframes link-snap {
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  15% {
+    transform: translateX(-6px) rotate(-1.2deg);
+  }
+  30% {
+    transform: translateX(5px) rotate(1deg);
+  }
+  45% {
+    transform: translateX(-4px) rotate(-0.6deg);
+  }
+  60% {
+    transform: translateX(3px) rotate(0.4deg);
+  }
+  75% {
+    transform: translateX(-2px) rotate(-0.2deg);
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+@utility link-snap {
+  animation: link-snap 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+/* The seal closing shut — used on a successful verification. */
+@keyframes seal-stamp {
+  0% {
+    transform: scale(2.2) rotate(-14deg);
+    opacity: 0;
+  }
+  55% {
+    transform: scale(0.92) rotate(3deg);
+    opacity: 1;
+  }
+  75% {
+    transform: scale(1.06) rotate(-1.5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@utility seal-stamp {
+  animation: seal-stamp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/*
+ * The one button on the page that gets a signature treatment — everything
+ * else stays plain so this keeps reading as the primary action, not just
+ * "the purple one."
+ */
+@keyframes run-sheen {
+  to {
+    background-position: 220% 0;
+  }
+}
+
+@utility run-button {
+  position: relative;
+  background: linear-gradient(
+    100deg,
+    var(--chain) 0%,
+    color-mix(in oklch, var(--chain) 70%, white 30%) 35%,
+    var(--chain) 50%,
+    var(--chain) 100%
+  );
+  background-size: 220% 100%;
+  color: var(--primary-foreground);
+  box-shadow:
+    0 1px 0 0 color-mix(in oklch, white 18%, transparent) inset,
+    0 0 0 1px color-mix(in oklch, var(--chain) 45%, transparent),
+    0 6px 20px -6px color-mix(in oklch, var(--chain) 70%, transparent);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.15s ease-out,
+    background-position 0.2s ease;
+
+  &:not(:disabled) {
+    animation: run-sheen 2.6s linear infinite;
+  }
+  &:not(:disabled):hover {
+    box-shadow:
+      0 1px 0 0 color-mix(in oklch, white 22%, transparent) inset,
+      0 0 0 1px color-mix(in oklch, var(--chain) 60%, transparent),
+      0 8px 26px -4px color-mix(in oklch, var(--chain) 85%, transparent);
+  }
+  &:disabled {
+    background-position: 0 0;
+  }
+}
+
+/*
+ * One rule to stop every decorative animation in this file at once. Several
+ * of them (the chain rail, the verification sweep, the run-button sheen)
+ * are purely ambient — they carry no information a static state doesn't
+ * already convey — so a person who has asked their OS for reduced motion
+ * gets the same product with none of the movement, not a degraded one.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .dark body::after {
+    display: none;
+  }
 }
